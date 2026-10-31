@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101a19">
+<title>Pulse Personal Fitness</title>
+
+<style>
+:root {
+  --bg:#101a19;
+  --panel:#1c2a27;
+  --mint:#83e4c2;
+  --text:#f4faf7;
+  --muted:#a9bbb4;
+  --line:#354943;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  padding:22px 16px 45px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+main {max-width:650px;margin:auto}
+header {padding:10px 3px 20px}
+h1 {color:var(--mint);font-size:32px;margin:8px 0}
+h2 {font-size:21px;margin-top:0}
+h3 {margin:0 0 8px}
+p {color:var(--muted);line-height:1.5}
+.card {
+  background:var(--panel);
+  padding:20px;
+  border-radius:18px;
+  margin:16px 0;
+}
+label {
+  display:block;
+  margin:17px 0 7px;
+  color:var(--muted);
+}
+select {
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  color:white;
+  font-size:16px;
+}
+button {
+  border:0;
+  border-radius:11px;
+  padding:13px 16px;
+  background:var(--mint);
+  color:#10211c;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button.secondary {
+  background:#344640;
+  color:white;
+}
+button:disabled {opacity:.4}
+.full {width:100%;margin-top:20px}
+.hidden {display:none}
+.days {
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding:5px 0 12px;
+}
+.day-button {
+  min-width:75px;
+  background:#30413b;
+  color:white;
+}
+.day-button.active {
+  background:var(--mint);
+  color:#10211c;
+}
+.progress {
+  height:10px;
+  background:#344640;
+  border-radius:20px;
+  overflow:hidden;
+}
+.progress span {
+  display:block;
+  height:100%;
+  width:0;
+  background:var(--mint);
+  transition:width .3s;
+}
+.exercise {
+  padding:17px 0;
+  border-top:1px solid var(--line);
+}
+.exercise:first-child {border-top:0}
+.exercise-top {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.exercise small {color:var(--mint)}
+.exercise p {margin:8px 0}
+.exercise label {
+  margin:10px 0 0;
+  color:var(--mint);
+}
+.exercise input {accent-color:var(--mint)}
+.figure {
+  height:100px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:10px 0;
+}
+.figure svg {
+  height:90px;
+  width:120px;
+  overflow:visible;
+}
+.person {
+  fill:none;
+  stroke:var(--mint);
+  stroke-width:5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.moving {
+  animation:bob 1.5s ease-in-out infinite alternate;
+  transform-origin:center;
+}
+@keyframes bob {
+  from {transform:translateY(0)}
+  to {transform:translateY(-7px)}
+}
+.actions {display:flex;gap:10px;flex-wrap:wrap}
+footer {
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:30px;
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<header>
+<p>YOUR PERSONAL WORKOUT COMPANION</p>
+<h1>Pulse Fitness ✦</h1>
+<p>Small steps. Stronger you. One day at a time.</p>
+</header>
+
+<section class="card" id="setup">
+<h2>Let's personalise your fitness plan</h2>
+<p>Answer these questions and Pulse will create a weekly routine for you.</p>
+
+<label for="goal">What is your main goal?</label>
+<select id="goal">
+<option value="fitness">Overall fitness</option>
+<option value="strength">Build strength</option>
+<option value="endurance">Improve endurance</option>
+<option value="flexibility">Improve flexibility</option>
+</select>
+
+<label for="level">Your current fitness level</label>
+<select id="level">
+<option value="beginner">Beginner</option>
+<option value="intermediate">Intermediate</option>
+<option value="advanced">Advanced</option>
+</select>
+
+<label for="place">Where will you exercise?</label>
+<select id="place">
+<option value="home">At home</option>
+<option value="gym">At the gym</option>
+<option value="both">Both</option>
+</select>
+
+<label for="equipment">What equipment do you have?</label>
+<select id="equipment">
+<option value="none">No equipment</option>
+<option value="basic">Dumbbells or resistance bands</option>
+<option value="gym">Full gym equipment</option>
+</select>
+
+<label for="daysCount">How many days per week?</label>
+<select id="daysCount">
+<option value="2">2 days</option>
+<option value="3">3 days</option>
+<option value="4" selected>4 days</option>
+<option value="5">5 days</option>
+<option value="6">6 days</option>
+</select>
+
+<label for="duration">How long per workout?</label>
+<select id="duration">
+<option value="10">10 minutes</option>
+<option value="20">20 minutes</option>
+<option value="30" selected>30 minutes</option>
+<option value="45">45 minutes</option>
+<option value="60">60 minutes</option>
+</select>
+
+<label for="style">Preferred workout style</label>
+<select id="style">
+<option value="mixed">A bit of everything</option>
+<option value="low">Low impact</option>
+<option value="cardio">Cardio</option>
+<option value="body">Bodyweight strength</option>
+</select>
+
+<label for="limits">Any areas we should be careful about?</label>
+<select id="limits">
+<option value="none">No particular limitations</option>
+<option value="knees">Knee sensitivity</option>
+<option value="wrists">Wrist sensitivity</option>
+<option value="back">Back sensitivity</option>
+<option value="impact">Avoid jumping and high impact</option>
+</select>
+
+<button class="full" onclick="makePlan()">CREATE MY WEEKLY PLAN →</button>
+</section>
+
+<section id="workout" class="hidden">
+
+<div class="card">
+<h2>Your weekly progress</h2>
+<div class="progress"><span id="progressBar"></span></div>
+<p id="progressText">0% completed</p>
+</div>
+
+<div class="days" id="dayButtons"></div>
+
+<div class="card">
+<h2 id="dayTitle">Your workout</h2>
+<p id="dayDescription"></p>
+<div id="exerciseList"></div>
+<div class="actions">
+<button class="secondary" onclick="resetDay()">Reset this day</button>
+<button class="secondary" onclick="editPlan()">Edit my answers</button>
+</div>
+</div>
+
+</section>
+
+<footer>
+Pulse Personal Fitness · Your journey, your pace.
+</footer>
+
+</main>
+
+<script>
+const exercises = {
+fitness: [
+["Marching on the spot","2 minutes","March gently, lifting one knee at a time."],
+["Chair squats","2 sets × 10 reps","Lower your hips towards a chair, then stand."],
+["Wall push-ups","2 sets × 10 reps","Place hands on a wall and bend your elbows."],
+["Glute bridges","2 sets × 12 reps","Lie down with knees bent and gently lift your hips."],
+["Standing calf raises","2 sets × 12 reps","Rise onto your toes and lower slowly."]
+],
+strength: [
+["Chair squats","2 sets × 10 reps","Lower towards a chair and stand back up."],
+["Wall push-ups","2 sets × 10 reps","Push gently away from a wall."],
+["Glute bridges","2 sets × 12 reps","Lift your hips while keeping feet on the floor."],
+["Bird dogs","2 sets × 8 each side","Extend opposite arm and leg while on hands and knees."],
+["Standing calf raises","2 sets × 12 reps","Rise onto your toes and lower with control."]
+],
+endurance: [
+["Marching on the spot","3 minutes","March at a steady, comfortable pace."],
+["Step touches","2 minutes","Step side to side and move your arms."],
+["Standing knee lifts","2 sets × 12 reps","Lift one knee at a time."],
+["Gentle shadow boxing","2 minutes","Punch gently into the air, alternating arms."],
+["Walking","5 minutes","Walk at a comfortable pace."]
+],
+flexibility: [
+["Shoulder rolls","10 reps","Roll your shoulders gently backwards."],
+["Standing side stretch","20 seconds each side","Reach one arm overhead and lean gently."],
+["Standing hamstring stretch","20 seconds each side","Extend one leg and hinge gently at your hips."],
+["Cat-cow stretch","8 reps","On hands and knees, gently arch and round your back."],
+["Child's pose","30 seconds","Sit back towards your heels and stretch your arms forward."]
+]
+};
+
+const kneeSafe = [
+["Seated knee extensions","2 sets × 10 reps","Sit on a chair and slowly straighten one leg."],
+["Wall push-ups","2 sets × 10 reps","Push gently away from a wall."],
+["Glute bridges","2 sets × 10 reps","Lift your hips gently while lying on your back."],
+["Seated arm raises","2 sets × 10 reps","Raise your arms slowly while seated."],
+["Gentle walking","3 minutes","Walk only if comfortable."]
+];
+
+const wristSafe = [
+["Chair squats","2 sets × 10 reps","Lower towards a chair and stand."],
+["Standing arm circles","2 sets × 10 reps","Make small circles with your arms."],
+["Glute bridges","2 sets × 10 reps","Lift your hips gently while lying down."],
+["Standing side stretch","20 seconds each side","Reach overhead gently."],
+["Marching on the spot","2 minutes","March at a comfortable pace."]
+];
+
+const backSafe = [
+["Seated arm raises","2 sets × 10 reps","Sit upright and raise your arms."],
+["Wall push-ups","2 sets × 10 reps","Push gently away from a wall."],
+["Standing calf raises","2 sets × 10 reps","Rise onto your toes."],
+["Gentle shoulder rolls","10 reps","Roll shoulders slowly backwards."],
+["Easy walking","3 minutes","Walk gently if comfortable."]
+];
+
+const impactSafe = [
+["Marching on the spot","3 minutes","March without jumping."],
+["Chair squats","2 sets × 10 reps","Sit back towards a chair and stand."],
+["Wall push-ups","2 sets × 10 reps","Push away from a wall."],
+["Standing side steps","2 minutes","Step gently from side to side."],
+["Standing calf raises","2 sets × 12 reps","Rise onto your toes."]
+];
+
+let plan = [];
+let completed = {};
+let selectedDay = 0;
+
+function makePlan() {
+  const goal = document.getElementById("goal").value;
+  const level = document.getElementById("level").value;
+  const count = Number(document.getElementById("daysCount").value);
+  const duration = Number(document.getElementById("duration").value);
+  const style = document.getElementById("style").value;
+  const limits = document.getElementById("limits").value;
+
+  let list = exercises[goal];
+
+  if (limits === "knees") list = kneeSafe;
+  if (limits === "wrists") list = wristSafe;
+  if (limits === "back") list = backSafe;
+  if (limits === "impact") list = impactSafe;
+
+  if (style === "low" || style === "body") {
+    list = list.filter(x => !x[0].toLowerCase().includes("jump"));
+  }
+
+  const multiplier = level === "beginner" ? 1 :
+    level === "intermediate" ? 1.5 : 2;
+
+  plan = [];
+
+  for (let i = 0; i < 7; i++) {
+    if (i < count) {
+      let daily = list.map(item => [
+        item[0],
+        item[1].replace("2 sets", multiplier === 1 ? "2 sets" :
+          multiplier === 1.5 ? "3 sets" : "4 sets"),
+        item[2]
+      ]);
+      plan.push({
+        name: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][i],
+        rest: false,
+        exercises: daily.slice(0, duration <= 20 ? 3 : 5)
+      });
+    } else {
+      plan.push({
+        name: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][i],
+        rest: true,
+        exercises: []
+      });
+    }
+  }
+
+  completed = {};
+  selectedDay = 0;
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("workout").classList.remove("hidden");
+
+  try {
+    localStorage.setItem("pulseAnswers", JSON.stringify({
+      goal,level,count,duration,style,limits
+    }));
+    localStorage.setItem("pulseCompleted","{}");
+  } catch(e) {}
+
+  render();
+}
+
+function render() {
+  const buttons = document.getElementById("dayButtons");
+  buttons.innerHTML = "";
+
+  plan.forEach((day,i) => {
+    const b = document.createElement("button");
+    b.className = "day-button" + (i === selectedDay ? " active" : "");
+    b.textContent = day.name.slice(0,3);
+    b.onclick = () => {
+      selectedDay = i;
+      render();
+    };
+    buttons.appendChild(b);
+  });
+
+  const day = plan[selectedDay];
+  document.getElementById("dayTitle").textContent = day.name;
+  document.getElementById("dayDescription").textContent =
+    day.rest ? "A recovery day. Rest, relax or enjoy a gentle walk." :
+    "Your personalised workout. Take breaks whenever you need.";
+
+  const list = document.getElementById("exerciseList");
+  list.innerHTML = "";
+
+  if (day.rest) {
+    list.innerHTML = "<h3>🌿 Recovery day</h3><p>Give your body time to recover. Gentle stretching or walking is optional.</p>";
+  } else {
+    day.exercises.forEach((ex,i) => {
+      const id = selectedDay + "-" + i;
+      const done = !!completed[id];
+      const item = document.createElement("div");
+      item.className = "exercise";
+
+      item.innerHTML = `
+        <div class="exercise-top">
+          <h3>${ex[0]}</h3>
+          <small>${ex[1]}</small>
+        </div>
+        <div class="figure">
+          <svg viewBox="0 0 120 100" aria-hidden="true">
+            <g class="person moving">
+              <circle cx="60" cy="17" r="9"></circle>
+              <path d="M60 27 L60 57 M60 36 L35 47 M60 36 L85 47 M60 57 L42 82 M60 57 L78 82"></path>
+            </g>
+          </svg>
+        </div>
+        <p>${ex[2]}</p>
+        <label>
+          <input type="checkbox" ${done ? "checked" : ""}
+          onchange="toggleExercise('${id}',this.checked)">
+          ${done ? "✓ Completed" : "Mark as completed"}
+        </label>
+      `;
+      list.appendChild(item);
+    });
+  }
+
+  updateProgress();
+}
+
+function toggleExercise(id,value) {
+  completed[id] = value;
+  try {
+    localStorage.setItem("pulseCompleted",JSON.stringify(completed));
+  } catch(e) {}
+  render();
+}
+
+function updateProgress() {
+  let total = 0;
+  let done = 0;
+
+  plan.forEach((day,i) => {
+    day.exercises.forEach((ex,j) => {
+      total++;
+      if (completed[i + "-" + j]) done++;
+    });
+  });
+
+  const percent = total ? Math.round(done / total * 100) : 0;
+  document.getElementById("progressBar").style.width = percent + "%";
+  document.getElementById("progressText").textContent =
+    percent + "% completed · " + done + " of " + total + " exercises";
+}
+
+function resetDay() {
+  plan[selectedDay].exercises.forEach((ex,i) => {
+    delete completed[selectedDay + "-" + i];
+  });
+  try {
+    localStorage.setItem("pulseCompleted",JSON.stringify(completed));
+  } catch(e) {}
+  render();
+}
+
+function editPlan() {
+  document.getElementById("workout").classList.add("hidden");
+  document.getElementById("setup").classList.remove("hidden");
+}
+
+try {
+  completed = JSON.parse(localStorage.getItem("pulseCompleted") || "{}");
+} catch(e) {
+  completed = {};
+}
+</script>
+</body>
+</html>
